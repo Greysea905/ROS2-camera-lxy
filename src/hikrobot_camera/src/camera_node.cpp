@@ -46,7 +46,7 @@ CameraNode::CameraNode(const rclcpp::NodeOptions & options)
     std::chrono::seconds(1),
     [this]() { this->reconnectTimerCallback(); });
 
-  // 启动抓图线程：逐帧抓取，相机出多快抓多快（不丢帧）
+  // 启动抓图线程：逐帧抓取
   running_ = true;
   grab_thread_ = std::thread([this]() { this->grabLoop(); });
 }
