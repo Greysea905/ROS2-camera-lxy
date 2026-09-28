@@ -102,5 +102,5 @@ ros2 param get /hikrobot_camera exposure_time            # 读回
 
 ## 测试结果
 
-- 图像发布帧率约 **88 Hz**（抓图线程逐帧取图，接近预设 100fps 上限；ai 分析可能受 Bayer→RGB 转换 CPU 开销拖累）
+- 图像发布帧率约 **93 Hz**（抓图线程逐帧取图，接近预设 100fps 上限；ai 分析可能受 Bayer→RGB 转换 CPU 开销拖累）
 - 断线重连：拔插 USB 线后，节点几秒后可自动检测并重连
