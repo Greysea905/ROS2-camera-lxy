@@ -1,0 +1,21 @@
+/hikrobot_camera:
+  ros__parameters:
+    use_sim_time: false
+
+    # 目标相机序列号（目前是机社的 2 号机）
+    serial_number: "DA0734524"
+
+    # 图像发布话题名
+    image_topic: "image_raw"
+
+    # 曝光时间，单位微秒（10ms 则帧率上限约 100fps）
+    exposure_time: 10000.0
+
+    # 增益，单位 dB
+    gain: 0.0
+
+    # 帧率，单位 fps
+    frame_rate: 100.0
+
+    # 像素格式枚举（0x02180014 = RGB8）（这条不是很懂）
+    pixel_format: 0x02180014

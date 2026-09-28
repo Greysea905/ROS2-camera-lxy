@@ -1,0 +1,23 @@
+# ---- colcon 构建产物（编译生成，勿提交）----
+/build/
+/install/
+/log/
+
+# ---- Python 缓存 ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- CMake 生成文件 ----
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+
+# ---- 编辑器 / 系统文件 ----
+.vscode/
+.idea/
+.claude/
+*.swp
+*~
+.DS_Store
