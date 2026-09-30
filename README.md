@@ -6,10 +6,42 @@
 
 - 按序列号（或 IP）**发现、选择并打开相机**，支持网口与 USB 相机
 - **采集图像并发布**；彩色相机的 Bayer 原始格式会在内部自动转换为 RGB8
-- 专用抓图线程**逐帧取图**，不丢帧，帧率预设 100 Hz 时实测 ~88 Hz）
+- 专用抓图线程**逐帧取图**，不丢帧，帧率预设 100 Hz 时实测约 93 Hz
 - 通过 ROS 2 参数动态调节**曝光、增益、帧率、像素格式**，越界自动校验
 - **断线自动检测与重连**，退出时自动释放资源
 - **错误反馈**（设备不存在、设备被占用等）
+
+## 项目结构
+
+```
+ROS2-camera-lxy/                        # colcon 工作空间
+├── src/hikrobot_camera/                # ROS 2 功能包
+│   ├── CMakeLists.txt                  # 构建配置
+│   ├── package.xml                     # 包信息与依赖
+│   ├── cmake/FindMVS.cmake             # MVS SDK 查找模块
+│   ├── include/hikrobot_camera/        # 头文件（类声明）
+│   │   ├── camera_node.hpp             #   CameraNode（ROS 节点层）
+│   │   └── mvs_camera.hpp              #   MvsCamera（SDK 封装层）、Frame 结构体
+│   ├── src/                            # 源文件（实现）
+│   │   ├── main.cpp                    #   入口
+│   │   ├── camera_node.cpp             #   CameraNode 实现
+│   │   └── mvs_camera.cpp              #   MvsCamera 实现
+│   ├── launch/camera.launch.py         # 启动文件
+│   ├── config/camera.yaml              # 参数配置
+│   └── test/                           # 测试（占位）
+├── docs/                               # 文档
+├── build/  install/  log/              # 构建产物（.gitignore 忽略）
+└── README.md                           # 本文件
+```
+
+### 分层设计
+
+| 层 | 类 | 职责 |
+|---|---|---|
+| ROS 节点层 | `CameraNode` | 话题发布、参数管理、定时器与抓图线程、资源生命周期 |
+| SDK 封装层 | `MvsCamera` | 设备枚举与连接、图像采集（含 Bayer→RGB 转换）、参数读写 |
+
+`CameraNode` 仅通过 `MvsCamera` 的公开接口操作相机，不直接依赖 SDK 类型，便于替换底层驱动。
 
 ## 环境依赖
 
@@ -102,5 +134,5 @@ ros2 param get /hikrobot_camera exposure_time            # 读回
 
 ## 测试结果
 
-- 图像发布帧率约 **93 Hz**（抓图线程逐帧取图，接近预设 100fps 上限；ai 分析可能受 Bayer→RGB 转换 CPU 开销拖累）
+- 图像发布帧率约 **93 Hz**（抓图线程逐帧取图，接近预设 100fps 上限；ai 分析受 Bayer→RGB 转换的 CPU 开销拖累）
 - 断线重连：拔插 USB 线后，节点几秒后可自动检测并重连
